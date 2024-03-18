@@ -48,7 +48,7 @@ return {
 						luasnip.lsp_expand(args.body)
 					end,
 				},
-				completion = { completeopt = "menu,menuone,noinsert" },
+				completion = { completeopt = "menu,menuone,noselect" },
 
 				-- For an understanding of why these mappings were
 				-- chosen, you will need to read `:help ins-completion`
@@ -88,25 +88,18 @@ return {
 							luasnip.jump(-1)
 						end
 					end, { "i", "s" }),
+
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
-							if #cmp.get_entries() == 1 then
-								cmp.confirm({ select = true })
-							else
-								cmp.select_next_item()
-							end
-						--[[ Replace with your snippet engine (see above sections on this page)
-      elseif snippy.can_expand_or_advance() then
-        snippy.expand_or_advance() ]]
+							cmp.select_next_item()
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
 						elseif has_words_before() then
 							cmp.complete()
-							if #cmp.get_entries() == 1 then
-								cmp.confirm({ select = true })
-							end
 						else
 							fallback()
 						end
-					end, { "i", "s" }),
+					end, { "i", "s", "c" }),
 
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
@@ -116,7 +109,7 @@ return {
 						else
 							fallback()
 						end
-					end, { "i", "s" }),
+					end, { "i", "s", "c" }),
 				}),
 				sources = {
 					{ name = "nvim_lsp" },
