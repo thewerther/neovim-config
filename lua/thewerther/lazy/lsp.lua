@@ -117,6 +117,10 @@ return {
 						})
 					end
 
+					if client.server_capabilities.inlayHintPorvider then
+						map("<leader>th", vim.lsp.inlay_hint(event.buf), "[T]oggle inlay [h]ints")
+					end
+
 					vim.keymap.set(
 						"v",
 						"<leader>f",
