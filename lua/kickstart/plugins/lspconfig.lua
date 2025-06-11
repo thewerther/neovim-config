@@ -19,8 +19,8 @@ return {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			-- Mason must be loaded before its dependents so we need to set it up here.
 			-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-			{ "williamboman/mason.nvim", opts = {} },
-			"williamboman/mason-lspconfig.nvim",
+			{ "mason-org/mason.nvim", opts = {} },
+			"mason-org/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
 			-- Useful status updates for LSP.
@@ -210,7 +210,7 @@ return {
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			local mason_registry = require("mason-registry")
-			local vue_ls_path = mason_registry.get_package("vue-language-server"):get_install_path()
+			local vue_ls_path = vim.fn.expand("$MASON/packages/vue-language-server/")
 
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -239,6 +239,7 @@ return {
 					cmd_env = { GOFUMPT_SPLIT_LONG_LINES = "on" },
 					settings = {
 						gopls = {
+							gofumpt = true,
 							hints = {
 								assignVariableTypes = true,
 								compositeLiteralFields = true,
@@ -248,35 +249,32 @@ return {
 								parameterNames = true,
 								rangeVariableTypes = true,
 							},
-							gofumpt = true,
 						},
 					},
 				},
-				ruff = {
-					init_options = {
-						settings = {
-							configurationPreference = "filesystemFirst",
-						},
-					},
-				},
-				pyright = {
-					settings = {
-						pyright = {
-							-- Using Ruff's import organizer
-							disableOrganizeImports = true,
-							disableTaggedHints = true,
-						},
-						python = {
-							analysis = {
-								diagnosticMode = "openFilesOnly",
-								diagnosticSeverityOverrides = {
-									-- https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
-									reportUndefinedVariable = "none",
-								},
-							},
-						},
-					},
-				},
+				-- ruff = {
+				-- 	init_options = {
+				-- 		settings = {
+				-- 			configurationPreference = "filesystemFirst",
+				-- 		},
+				-- 	},
+				-- },
+				-- pyright = {
+				-- 	settings = {
+				-- 		pyright = {
+				-- 			-- Using Ruff's import organizer
+				-- 			disableOrganizeImports = true,
+				-- 			disableTaggedHints = true,
+				-- 		},
+				-- 		python = {
+				-- 			analysis = {
+				-- 				-- Ignore all files for analysis to exclusively use Ruff for linting
+				-- 				ignore = { "*" },
+				-- 			},
+				-- 		},
+				-- 	},
+				-- },
+				basedpyright = {},
 				rust_analyzer = {},
 				lua_ls = {
 					-- cmd = { ... },
